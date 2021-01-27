@@ -1,8 +1,5 @@
+import 
 
-
-### 贝叶斯集成函数
-data是子模型的预测结果，为$n*i$二维列表，其中n是子模型数量，i为样本数
-```python
 def bayesian(data, thresh, n):
     '''
     data: predicts of sub-models which is a 2-D list
@@ -17,10 +14,7 @@ def bayesian(data, thresh, n):
     sum_P_x_F = np.sum(list(map(lambda i: np.exp(P_x_F[i] * 0.5), range(n))), 0)
     BIC = np.sum(list(map(lambda i: p_F_x[i] * np.exp(P_x_F[i]*0.5) / sum_P_x_F, range(n))), 0)
     return BIC
- ```
-### 核密度估计
-输入样本及置信度，返回该置信度下的阈值
-```python
+
 import statsmodels.api as sm
 from scipy.interpolate import interp1d
 def ksdensity_ICDF(x, p):
@@ -34,39 +28,29 @@ def ksdensity_ICDF(x, p):
     # interpolate KDE CDF to get support values
     fint = interp1d(kde.cdf, kde.support)
     return fint(p)
-```
 
-### 故障检测指标计算
-返回检出率和误报率
-```python
 def index(label, pred):
-    # 计算检出率、误报率
+    '''
+    计算检出率、误报率
+    '''
     FDR = np.sum(pred[np.nonzero(label)]) / pred[np.nonzero(label)].shape  # 检出率
     FPR = np.sum(pred[np.nonzero(-label + 1)]) / pred[np.nonzero(-label + 1)].shape  # 误报率
     return FDR, FPR
- ```
-
-### 图片旋转及镜像翻转
-```python
-def rotate(img, angle):
-    # 图片旋转操作
-    rotate = cv2.getRotationMatrix2D((32, 32, angle, 1)  # 参数：旋转中心点, 旋转角度, 缩放比例
-    rotate_img = cv2.warpAffine(img, rotate, (64, 64))
-    return rotate_img 
-    
-def flip(img):
-    # 图片镜像操作
-    return np.concatenate((img, cv2.flip(img, 1)), 0)
 
 def rotate(img):
-    # 图片旋转操作，返回图片90°旋转四次的图片集合
+    '''
+    图片旋转操作
+    '''
     angle = 0
     output = []
     for i in range(4):
         angle += 90
-        rotate = cv2.getRotationMatrix2D((32, 32, angle, 1)  # 参数：旋转中心点, 旋转角度, 缩放比例
-        output.append(cv2.warpAffine(img, rotate, (64, 64)))
+        rotate = cv2.getRotationMatrix2D((24, 24), angle, 1)  # 参数：旋转中心点, 旋转角度, 缩放比例
+        output.append(cv2.warpAffine(img, rotate, (48, 48)))
     return np.array(output)
-```
 
-
+def flip(img):
+    '''
+    图片镜像操作
+    '''
+    return np.concatenate((img, cv2.flip(img, 1)), 0)

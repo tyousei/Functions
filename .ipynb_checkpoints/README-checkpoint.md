@@ -2,7 +2,7 @@
 
 ### 贝叶斯集成函数
 data是子模型的预测结果，为$n*i$二维列表，其中n是子模型数量，i为样本数
-```python
+```
 def bayesian(data, thresh, n):
     '''
     data: predicts of sub-models which is a 2-D list
@@ -20,7 +20,7 @@ def bayesian(data, thresh, n):
  ```
 ### 核密度估计
 输入样本及置信度，返回该置信度下的阈值
-```python
+```
 import statsmodels.api as sm
 from scipy.interpolate import interp1d
 def ksdensity_ICDF(x, p):
@@ -38,7 +38,7 @@ def ksdensity_ICDF(x, p):
 
 ### 故障检测指标计算
 返回检出率和误报率
-```python
+```
 def index(label, pred):
     # 计算检出率、误报率
     FDR = np.sum(pred[np.nonzero(label)]) / pred[np.nonzero(label)].shape  # 检出率
@@ -47,7 +47,7 @@ def index(label, pred):
  ```
 
 ### 图片旋转及镜像翻转
-```python
+```
 def rotate(img, angle):
     # 图片旋转操作
     rotate = cv2.getRotationMatrix2D((32, 32, angle, 1)  # 参数：旋转中心点, 旋转角度, 缩放比例
